@@ -1,17 +1,16 @@
 library(tm)
 library(igraph)
 library(data.table)
-twitter_data = results_olympics
-twitter_data = read.table(file="/Users/annawang/icloud/Documents/Documents/RAproject/stackoverflow/R_stackoverflow_data/results_olympics.csv", header=TRUE,sep=",",encoding="UTF-8", stringsAsFactors = FALSE)
-twitter_data$text = paste(substr(twitter_data$text,2,nchar(twitter_data$text))) # We may need to remove the first charactore 'b' from the string.
+twitter_data = results_olympics # read file
 
 text = twitter_data$text
+# clean text
 text_clean = gsub("(RT|via)((?:\\b\\W*@\\w+)+)", "", text)
 text_clean = gsub("@\\w+", "", text_clean)
 text_clean = gsub("[[:punct:]]", "", text_clean)
 text_clean = gsub("[[:digit:]]", "", text_clean)
 text_clean = gsub("http\\w+", "", text_clean)
-text_clean
+# build corpus
 text_corpus = Corpus(VectorSource(text_clean))
 text_corpus = tm_map(text_corpus, tolower)
 text_corpus = tm_map(text_corpus, removeWords, c(stopwords("english"), "olympics"))
